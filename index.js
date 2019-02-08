@@ -28,7 +28,7 @@ function _dump (value, objStack, level) {
 }
 
 /**
- * hecks if the given value is a HTML element.
+ * Checks if the given value is a HTML element.
  * @param value
  * @returns {boolean}
  */
