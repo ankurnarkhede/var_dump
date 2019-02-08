@@ -46,10 +46,10 @@ function isElement (value) {
  * @returns {string}
  */
 function getIndent (level) {
-  var str = ''
+  let str = ''
   level *= 4
 
-  for (var i = 0; i < level; i++) {
+  for (let i = 0; i < level; i++) {
     str += ' '
   }
 
@@ -63,17 +63,17 @@ function getIndent (level) {
  * @returns {string}
  */
 function varIsFunction (func, level) {
-  var name = func.name
-  var args = getFuncArgs(func)
-  var curIndent = getIndent(level)
-  var nextIndent = getIndent(level + 1)
-  var dump = 'function {\n' + nextIndent + '[name] => ' + (name.length === 0 ? '(anonymous)' : name)
+  let name = func.name
+  let args = getFuncArgs(func)
+  let curIndent = getIndent(level)
+  let nextIndent = getIndent(level + 1)
+  let dump = 'function {\n' + nextIndent + '[name] => ' + (name.length === 0 ? '(anonymous)' : name)
 
   if (args.length > 0) {
     dump += '\n' + nextIndent + '[parameters] => {\n'
-    var argsIndent = getIndent(level + 2)
+    let argsIndent = getIndent(level + 2)
 
-    for (var i = 0; i < args.length; i++) {
+    for (let i = 0; i < args.length; i++) {
       dump += argsIndent + args[i] + '\n'
     }
 
@@ -83,8 +83,8 @@ function varIsFunction (func, level) {
   return dump + '\n' + curIndent + '}'
 }
 
-var STRIP_COMMENTS = /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/mg
-var ARGUMENT_NAMES = /([^\s,]+)/g
+let STRIP_COMMENTS = /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/mg
+let ARGUMENT_NAMES = /([^\s,]+)/g
 
 /**
  * Strips comments
@@ -92,8 +92,8 @@ var ARGUMENT_NAMES = /([^\s,]+)/g
  * @returns {Array}
  */
 function getFuncArgs (func) {
-  var str = func.toString().replace(STRIP_COMMENTS, '')
-  var result = str.slice(str.indexOf('(') + 1, str.indexOf(')')).match(ARGUMENT_NAMES)
+  let str = func.toString().replace(STRIP_COMMENTS, '')
+  let result = str.slice(str.indexOf('(') + 1, str.indexOf(')')).match(ARGUMENT_NAMES)
 
   if (result === null) {
     return []
@@ -122,25 +122,25 @@ function varIsObject (obj, stack, level) {
     return 'HTMLElement(' + obj.nodeName + ')'
   }
 
-  var dump = null
-  var length = 0
-  var numericIndex = true
+  let dump = null
+  let length = 0
+  let numericIndex = true
   stack.push(obj)
 
   if (Array.isArray(obj)) {
     length = obj.length
     dump = 'array(' + length + ') '
   } else {
-    var name = ''
+    let name = ''
 
     // The object is an instance of a function
     if (obj.constructor.name !== 'Object') {
       name = ' ' + obj.constructor.name
 
       // Get the object properties
-      var proto = {}
+      let proto = {}
 
-      for (var name in obj) {
+      for (let name in obj) {
         if (obj[name] === null || obj[name].constructor.name !== 'Function') {
           proto[name] = obj[name]
         }
@@ -158,11 +158,11 @@ function varIsObject (obj, stack, level) {
     return dump + '{}'
   }
 
-  var curIndent = getIndent(level)
-  var nextIndent = getIndent(level + 1)
+  let curIndent = getIndent(level)
+  let nextIndent = getIndent(level + 1)
 
   dump += '{\n'
-  for (var i in obj) {
+  for (let i in obj) {
     if (obj.hasOwnProperty(i)) {
       dump += nextIndent + '[' + (numericIndex ? i : '"' + i + '"') + '] => ' + _dump(obj[i], stack, level + 1) + '\n'
     }
@@ -175,7 +175,7 @@ function varIsObject (obj, stack, level) {
  * Base vardump function
  */
 function vardump () {
-  for (var i = 0; i < arguments.length; i++) {
+  for (let i = 0; i < arguments.length; i++) {
     console.log(_dump(arguments[i], [], 0))
   }
 }

@@ -1,0 +1,30 @@
+{
+  "name": "vardump",
+  "version": "1.0.0",
+  "description": "Implementation of PHP's var_dump function for JavaScript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smartankur4u/vardump.git"
+  },
+  "keywords": [
+    "var_dump",
+    "vardump",
+    "PHP",
+    "node",
+    "debugging",
+    "testing",
+    "console",
+    "variables",
+    "var"
+  ],
+  "author": "Ankur Narkhede",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smartankur4u/vardump/issues"
+  },
+  "homepage": "https://github.com/smartankur4u/vardump#readme"
+}
