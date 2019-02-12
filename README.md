@@ -24,7 +24,8 @@ npm install @smartankur4u/vardump --save-dev
 ## Usage
 
 ```js
-const vardump = require('vardump')
+const vardump = require('@smartankur4u/vardump')
+
 ```
 
 Use vardump while development for printing details of variables and functions.
