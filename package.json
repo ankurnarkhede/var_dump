@@ -1,6 +1,6 @@
 {
   "name": "@smartankur4u/vardump",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Implementation of PHP's var_dump function for JavaScript.",
   "main": "index.js",
   "scripts": {
