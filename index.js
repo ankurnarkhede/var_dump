@@ -37,7 +37,8 @@ function isElement (value) {
     return value instanceof HTMLElement
   }
 
-  return typeof value === 'object' && value !== null && value.nodeType === 1 && typeof value.nodeName === 'string'
+  return typeof value === 'object' && value !== null && value.nodeType === 1 &&
+    typeof value.nodeName === 'string'
 }
 
 /**
@@ -67,7 +68,8 @@ function varIsFunction (func, level) {
   let args = getFuncArgs(func)
   let curIndent = getIndent(level)
   let nextIndent = getIndent(level + 1)
-  let dump = 'function {\n' + nextIndent + '[name] => ' + (name.length === 0 ? '(anonymous)' : name)
+  let dump = 'function {\n' + nextIndent + '[name] => ' +
+    (name.length === 0 ? '(anonymous)' : name)
 
   if (args.length > 0) {
     dump += '\n' + nextIndent + '[parameters] => {\n'
@@ -93,7 +95,8 @@ let ARGUMENT_NAMES = /([^\s,]+)/g
  */
 function getFuncArgs (func) {
   let str = func.toString().replace(STRIP_COMMENTS, '')
-  let result = str.slice(str.indexOf('(') + 1, str.indexOf(')')).match(ARGUMENT_NAMES)
+  let result = str.slice(str.indexOf('(') + 1, str.indexOf(')')).
+    match(ARGUMENT_NAMES)
 
   if (result === null) {
     return []
@@ -164,7 +167,8 @@ function varIsObject (obj, stack, level) {
   dump += '{\n'
   for (let i in obj) {
     if (obj.hasOwnProperty(i)) {
-      dump += nextIndent + '[' + (numericIndex ? i : '"' + i + '"') + '] => ' + _dump(obj[i], stack, level + 1) + '\n'
+      dump += nextIndent + '[' + (numericIndex ? i : '"' + i + '"') + '] => ' +
+        _dump(obj[i], stack, level + 1) + '\n'
     }
   }
 
@@ -172,12 +176,12 @@ function varIsObject (obj, stack, level) {
 }
 
 /**
- * Base vardump function
+ * Base var_dump function
  */
-function vardump () {
+function var_dump () {
   for (let i = 0; i < arguments.length; i++) {
     console.log(_dump(arguments[i], [], 0))
   }
 }
 
-module.exports = vardump
+module.exports = var_dump

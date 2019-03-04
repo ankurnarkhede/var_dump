@@ -1,6 +1,6 @@
 {
-  "name": "@smartankur4u/vardump",
-  "version": "1.0.4",
+  "name": "var_dump",
+  "version": "1.0.3",
   "description": "Implementation of PHP's var_dump function for JavaScript.",
   "main": "index.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/smartankur4u/vardump.git"
+    "url": "git+https://github.com/smartankur4u/var_dump.git"
   },
   "keywords": [
     "var_dump",
     "vardump",
     "var-dump",
     "js_var_dump",
-    "var_sump_js",
+    "var_dump_js",
     "dump",
     "variables",
     "print",
@@ -28,7 +28,7 @@
   "author": "Ankur Narkhede",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/smartankur4u/vardump/issues"
+    "url": "https://github.com/smartankur4u/var_dump/issues"
   },
-  "homepage": "https://github.com/smartankur4u/vardump#readme"
+  "homepage": "https://github.com/smartankur4u/var_dump#readme"
 }
