@@ -46,9 +46,10 @@ var variable = {
 // print the variable using var_dump
 var_dump(variable)
 ```
+
 This will print:
 
-```
+```js
 object(1) {
     ["data"] => object(1) {
         ["users"] => object(2) {
