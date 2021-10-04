@@ -1,47 +1,6 @@
-/**
- * Generates dump string
- * @param value
- * @param objStack
- * @param level
- * @returns {*}
- * @private
- */
-function _dump(value, objStack, level) {
-  const dump = typeof value;
-
-  switch (dump) {
-    case "undefined":
-      return dump;
-    case "boolean":
-      return `${dump}(${value ? "true" : "false"})`;
-    case "number":
-      return `${dump}(${value})`;
-    case "string":
-      return `${dump}(${value.length}) "${value}"`;
-    case "function":
-      return varIsFunction(value, level);
-    case "object":
-      return varIsObject(value, objStack, level);
-  }
-}
-
-/**
- * Checks if the given value is a HTML element.
- * @param value
- * @returns {boolean}
- */
-function isElement(value) {
-  if (typeof HTMLElement === "object") {
-    return value instanceof HTMLElement;
-  }
-
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    value.nodeType === 1 &&
-    typeof value.nodeName === "string"
-  );
-}
+const STRIP_COMMENTS =
+  /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,)]*))/gm;
+const ARGUMENT_NAMES = /([^\s,]+)/g;
 
 /**
  * Gets indent according to level
@@ -50,13 +9,31 @@ function isElement(value) {
  */
 function getIndent(level) {
   let str = "";
-  level *= 4;
+  const indentLevel = level * 4;
 
-  for (let i = 0; i < level; i++) {
+  for (let i = 0; i < indentLevel; i += 1) {
     str += " ";
   }
 
   return str;
+}
+
+/**
+ * Strips comments
+ * @param func
+ * @returns {Array}
+ */
+function getFuncArgs(func) {
+  const str = func.toString().replace(STRIP_COMMENTS, "");
+  const result = str
+    .slice(str.indexOf("(") + 1, str.indexOf(")"))
+    .match(ARGUMENT_NAMES);
+
+  if (result === null) {
+    return [];
+  }
+
+  return result;
 }
 
 /**
@@ -78,7 +55,7 @@ function varIsFunction(func, level) {
     dump += `\n${nextIndent}[parameters] => {\n`;
     const argsIndent = getIndent(level + 2);
 
-    for (let i = 0; i < args.length; i++) {
+    for (let i = 0; i < args.length; i += 1) {
       dump += `${argsIndent + args[i]}\n`;
     }
 
@@ -88,26 +65,53 @@ function varIsFunction(func, level) {
   return `${dump}\n${curIndent}}`;
 }
 
-const STRIP_COMMENTS =
-  /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/gm;
-const ARGUMENT_NAMES = /([^\s,]+)/g;
-
 /**
- * Strips comments
- * @param func
- * @returns {Array}
+ * Checks if the given value is a HTML element.
+ * @param value
+ * @returns {boolean}
  */
-function getFuncArgs(func) {
-  const str = func.toString().replace(STRIP_COMMENTS, "");
-  const result = str
-    .slice(str.indexOf("(") + 1, str.indexOf(")"))
-    .match(ARGUMENT_NAMES);
-
-  if (result === null) {
-    return [];
+function isElement(value) {
+  if (typeof HTMLElement === "object") {
+    // eslint-disable-next-line no-undef
+    return value instanceof HTMLElement;
   }
 
-  return result;
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    value.nodeType === 1 &&
+    typeof value.nodeName === "string"
+  );
+}
+
+/**
+ * Generates dump string
+ * @param value
+ * @param objStack
+ * @param level
+ * @returns {*}
+ * @private
+ */
+function dumpValues(value, objStack, level) {
+  const dump = typeof value;
+
+  switch (dump) {
+    case "undefined":
+      return dump;
+    case "boolean":
+      return `${dump}(${value ? "true" : "false"})`;
+    case "number":
+      return `${dump}(${value})`;
+    case "string":
+      return `${dump}(${value.length}) "${value}"`;
+    case "function":
+      return varIsFunction(value, level);
+    case "object":
+      // eslint-disable-next-line no-use-before-define
+      return varIsObject(value, objStack, level);
+    default:
+      return dump;
+  }
 }
 
 /**
@@ -148,12 +152,14 @@ function varIsObject(obj, stack, level) {
       // Get the object properties
       const proto = {};
 
+      // eslint-disable-next-line no-restricted-syntax,no-shadow
       for (const name in obj) {
         if (obj[name] === null || obj[name].constructor.name !== "Function") {
           proto[name] = obj[name];
         }
       }
 
+      // eslint-disable-next-line no-param-reassign
       obj = proto;
     }
 
@@ -170,9 +176,11 @@ function varIsObject(obj, stack, level) {
   const nextIndent = getIndent(level + 1);
 
   dump += "{\n";
+  // eslint-disable-next-line no-restricted-syntax
   for (const i in obj) {
+    // eslint-disable-next-line no-prototype-builtins
     if (obj.hasOwnProperty(i)) {
-      dump += `${nextIndent}[${numericIndex ? i : `"${i}"`}] => ${_dump(
+      dump += `${nextIndent}[${numericIndex ? i : `"${i}"`}] => ${dumpValues(
         obj[i],
         stack,
         level + 1
@@ -186,10 +194,13 @@ function varIsObject(obj, stack, level) {
 /**
  * Base var_dump function
  */
+// eslint-disable-next-line camelcase
 function var_dump() {
-  for (let i = 0; i < arguments.length; i++) {
-    console.log(_dump(arguments[i], [], 0));
+  for (let i = 0; i < arguments.length; i += 1) {
+    // eslint-disable-next-line prefer-rest-params
+    console.log(dumpValues(arguments[i], [], 0));
   }
 }
 
+// eslint-disable-next-line camelcase
 module.exports = var_dump;
