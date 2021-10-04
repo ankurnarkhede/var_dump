@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Generates dump string
  * @param value
@@ -8,22 +6,22 @@
  * @returns {*}
  * @private
  */
-function _dump (value, objStack, level) {
-  let dump = typeof value
+function _dump(value, objStack, level) {
+  const dump = typeof value;
 
   switch (dump) {
-    case 'undefined':
-      return dump
-    case 'boolean':
-      return dump + '(' + (value ? 'true' : 'false') + ')'
-    case 'number':
-      return dump + '(' + value + ')'
-    case 'string':
-      return dump + '(' + value.length + ') "' + value + '"'
-    case 'function':
-      return varIsFunction(value, level)
-    case 'object':
-      return varIsObject(value, objStack, level)
+    case "undefined":
+      return dump;
+    case "boolean":
+      return `${dump}(${value ? "true" : "false"})`;
+    case "number":
+      return `${dump}(${value})`;
+    case "string":
+      return `${dump}(${value.length}) "${value}"`;
+    case "function":
+      return varIsFunction(value, level);
+    case "object":
+      return varIsObject(value, objStack, level);
   }
 }
 
@@ -32,13 +30,17 @@ function _dump (value, objStack, level) {
  * @param value
  * @returns {boolean}
  */
-function isElement (value) {
-  if (typeof HTMLElement === 'object') {
-    return value instanceof HTMLElement
+function isElement(value) {
+  if (typeof HTMLElement === "object") {
+    return value instanceof HTMLElement;
   }
 
-  return typeof value === 'object' && value !== null && value.nodeType === 1 &&
-    typeof value.nodeName === 'string'
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    value.nodeType === 1 &&
+    typeof value.nodeName === "string"
+  );
 }
 
 /**
@@ -46,15 +48,15 @@ function isElement (value) {
  * @param level
  * @returns {string}
  */
-function getIndent (level) {
-  let str = ''
-  level *= 4
+function getIndent(level) {
+  let str = "";
+  level *= 4;
 
   for (let i = 0; i < level; i++) {
-    str += ' '
+    str += " ";
   }
 
-  return str
+  return str;
 }
 
 /**
@@ -63,46 +65,49 @@ function getIndent (level) {
  * @param level
  * @returns {string}
  */
-function varIsFunction (func, level) {
-  let name = func.name
-  let args = getFuncArgs(func)
-  let curIndent = getIndent(level)
-  let nextIndent = getIndent(level + 1)
-  let dump = 'function {\n' + nextIndent + '[name] => ' +
-    (name.length === 0 ? '(anonymous)' : name)
+function varIsFunction(func, level) {
+  const { name } = func;
+  const args = getFuncArgs(func);
+  const curIndent = getIndent(level);
+  const nextIndent = getIndent(level + 1);
+  let dump = `function {\n${nextIndent}[name] => ${
+    name.length === 0 ? "(anonymous)" : name
+  }`;
 
   if (args.length > 0) {
-    dump += '\n' + nextIndent + '[parameters] => {\n'
-    let argsIndent = getIndent(level + 2)
+    dump += `\n${nextIndent}[parameters] => {\n`;
+    const argsIndent = getIndent(level + 2);
 
     for (let i = 0; i < args.length; i++) {
-      dump += argsIndent + args[i] + '\n'
+      dump += `${argsIndent + args[i]}\n`;
     }
 
-    dump += nextIndent + '}'
+    dump += `${nextIndent}}`;
   }
 
-  return dump + '\n' + curIndent + '}'
+  return `${dump}\n${curIndent}}`;
 }
 
-let STRIP_COMMENTS = /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/mg
-let ARGUMENT_NAMES = /([^\s,]+)/g
+const STRIP_COMMENTS =
+  /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/gm;
+const ARGUMENT_NAMES = /([^\s,]+)/g;
 
 /**
  * Strips comments
  * @param func
  * @returns {Array}
  */
-function getFuncArgs (func) {
-  let str = func.toString().replace(STRIP_COMMENTS, '')
-  let result = str.slice(str.indexOf('(') + 1, str.indexOf(')')).
-    match(ARGUMENT_NAMES)
+function getFuncArgs(func) {
+  const str = func.toString().replace(STRIP_COMMENTS, "");
+  const result = str
+    .slice(str.indexOf("(") + 1, str.indexOf(")"))
+    .match(ARGUMENT_NAMES);
 
   if (result === null) {
-    return []
+    return [];
   }
 
-  return result
+  return result;
 }
 
 /**
@@ -112,76 +117,79 @@ function getFuncArgs (func) {
  * @param level
  * @returns {string}
  */
-function varIsObject (obj, stack, level) {
+function varIsObject(obj, stack, level) {
   if (stack.indexOf(obj) !== -1) {
-    return '*RECURSION*'
+    return "*RECURSION*";
   }
 
   if (obj === null) {
-    return 'NULL'
+    return "NULL";
   }
 
   if (isElement(obj)) {
-    return 'HTMLElement(' + obj.nodeName + ')'
+    return `HTMLElement(${obj.nodeName})`;
   }
 
-  let dump = null
-  let length = 0
-  let numericIndex = true
-  stack.push(obj)
+  let dump = null;
+  let length = 0;
+  let numericIndex = true;
+  stack.push(obj);
 
   if (Array.isArray(obj)) {
-    length = obj.length
-    dump = 'array(' + length + ') '
+    length = obj.length;
+    dump = `array(${length}) `;
   } else {
-    let name = ''
+    let name = "";
 
     // The object is an instance of a function
-    if (obj.constructor.name !== 'Object') {
-      name = ' ' + obj.constructor.name
+    if (obj.constructor.name !== "Object") {
+      name = ` ${obj.constructor.name}`;
 
       // Get the object properties
-      let proto = {}
+      const proto = {};
 
-      for (let name in obj) {
-        if (obj[name] === null || obj[name].constructor.name !== 'Function') {
-          proto[name] = obj[name]
+      for (const name in obj) {
+        if (obj[name] === null || obj[name].constructor.name !== "Function") {
+          proto[name] = obj[name];
         }
       }
 
-      obj = proto
+      obj = proto;
     }
 
-    length = Object.keys(obj).length
-    dump = 'object' + name + '(' + length + ') '
-    numericIndex = false
+    length = Object.keys(obj).length;
+    dump = `object${name}(${length}) `;
+    numericIndex = false;
   }
 
   if (length === 0) {
-    return dump + '{}'
+    return `${dump}{}`;
   }
 
-  let curIndent = getIndent(level)
-  let nextIndent = getIndent(level + 1)
+  const curIndent = getIndent(level);
+  const nextIndent = getIndent(level + 1);
 
-  dump += '{\n'
-  for (let i in obj) {
+  dump += "{\n";
+  for (const i in obj) {
     if (obj.hasOwnProperty(i)) {
-      dump += nextIndent + '[' + (numericIndex ? i : '"' + i + '"') + '] => ' +
-        _dump(obj[i], stack, level + 1) + '\n'
+      dump += `${nextIndent}[${numericIndex ? i : `"${i}"`}] => ${_dump(
+        obj[i],
+        stack,
+        level + 1
+      )}\n`;
     }
   }
 
-  return dump + curIndent + '}'
+  return `${dump + curIndent}}`;
 }
 
 /**
  * Base var_dump function
  */
-function var_dump () {
+function var_dump() {
   for (let i = 0; i < arguments.length; i++) {
-    console.log(_dump(arguments[i], [], 0))
+    console.log(_dump(arguments[i], [], 0));
   }
 }
 
-module.exports = var_dump
+module.exports = var_dump;
