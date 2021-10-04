@@ -26,7 +26,9 @@ module.exports = {
     // Custom eslint rules
     "no-trailing-spaces": "error",
     "consistent-return": "error",
-    "no-console": "error",
+
+    // Allow console for the project
+    // "no-console": "error",
 
     // Custom mocha rules
     "mocha/no-skipped-tests": "error",
