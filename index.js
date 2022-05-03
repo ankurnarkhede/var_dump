@@ -154,7 +154,7 @@ function varIsObject(obj, stack, level) {
 
       // eslint-disable-next-line no-restricted-syntax,no-shadow
       for (const name in obj) {
-        if (obj[name] === null || obj[name].constructor.name !== "Function") {
+        if (obj[name] === null || obj[name] === undefined || obj[name].constructor.name !== "Function") {
           proto[name] = obj[name];
         }
       }
