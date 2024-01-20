@@ -1,7 +1,9 @@
 {
   "name": "var_dump",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Implementation of PHP's var_dump function for JavaScript.",
+  "author": "Ankur Narkhede",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "lint": "eslint . && echo '✔  Your .js files look good.'",
@@ -10,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/smartankur4u/var_dump.git"
+    "url": "git+https://github.com/ankurnarkhede/var_dump.git"
   },
   "keywords": [
     "var_dump",
@@ -27,12 +29,10 @@
     "console",
     "development"
   ],
-  "author": "Ankur Narkhede",
-  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/smartankur4u/var_dump/issues"
+    "url": "https://github.com/ankurnarkhede/var_dump/issues"
   },
-  "homepage": "https://github.com/smartankur4u/var_dump#readme",
+  "homepage": "https://github.com/ankurnarkhede/var_dump#readme",
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
